@@ -1,0 +1,87 @@
+// Sort parallel arrays with quick sort
+
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+class FunRunQuiSort {
+static int iSize = 5; // Set value
+static double[] daFinishTime = new double[iSize];
+static String[] saRunnerName = new String[iSize];
+
+static void getInput() {
+    System.out.println("\n***** 5K RUNNERS *****");
+    for(int i = 0; i < saRunnerName.length; i++) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter runner name: ");
+        saRunnerName[i] = input.nextLine();
+
+        System.out.print("Enter finish time: ");
+        daFinishTime[i] = input.nextDouble();
+
+        System.out.print("\r\n");
+    }
+}
+
+static void doQuickSort(double[] daFinishTime, int i, int j) {
+    double dTemp;
+    String sTemp;
+
+    // Pivot
+    double dPivot = daFinishTime[(i + j) / 2];
+
+    // Partition
+    while(i <= j) {
+        while(daFinishTime[i] < dPivot) {
+            i++;
+        } 
+        while(daFinishTime[j] > dPivot) {
+            j--;
+        }
+        if(i <= j) {
+            dTemp = daFinishTime[i];
+            daFinishTime[i] = daFinishTime[j];
+            daFinishTime[j] = dTemp;
+
+            sTemp = saRunnerName[i];
+            saRunnerName[i] = saRunnerName[j];
+            saRunnerName[j] = sTemp;
+
+            i++;
+            j--;
+        }
+    }
+
+    // Recursion
+    if(i < i - 1) {
+        doQuickSort(daFinishTime, i, i - 1);
+    }
+    if(i < j) {
+        doQuickSort(daFinishTime, i, j);
+    }
+}
+
+static void printOutput() {
+    DecimalFormat df = new DecimalFormat("##.00");
+
+    System.out.println("***** SORTED RUNTIMES *****");
+    for(int i = 0; i < daFinishTime.length; i++) {
+        System.out.println("[" + (i + 1) + "] " +
+                df.format(daFinishTime[i]) + " mins. by " +
+                saRunnerName[i]);
+    }
+
+    System.out.println("\n***** TOP 3 RUNTIMES *****");
+    for(int i = 0; i < 3; i++) {
+        System.out.println("#" + (i + 1) + " Place: " +
+                df.format(daFinishTime[i]) + " mins. by " +
+                saRunnerName[i]);
+    }
+}
+
+public static void main(String[] args) {
+        getInput();
+        doQuickSort(daFinishTime, 0, daFinishTime.length - 1);
+        printOutput();
+    }
+}
